@@ -1,0 +1,13 @@
+version: '3.4'
+services:
+  app:
+    image: nextjs-demo-docker
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+        - .:/app
+        - /app/node_modules
+        - /app/.next
+    ports:
+      - "3000:3000"
