@@ -1,4 +1,4 @@
-# m
+# Readme
 
 Next.js 13 + MySQL + Sequelize
 
