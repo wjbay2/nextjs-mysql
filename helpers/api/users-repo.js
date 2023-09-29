@@ -1,39 +1,16 @@
 import getConfig from 'next/config';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { db } from 'helpers/api';
 
 const { serverRuntimeConfig } = getConfig();
 
 export const usersRepo = {
-    authenticate,
     getAll,
     getById,
     create,
     update,
     delete: _delete
 };
-
-async function authenticate({ username, password }) {
-    const user = await db.User.scope('withHash').findOne({ where: { username } });
-
-    if (!(user && bcrypt.compareSync(password, user.hash))) {
-        throw 'Username or password is incorrect';
-    }
-
-    // create a jwt token that is valid for 7 days
-    const token = jwt.sign({ sub: user.id }, serverRuntimeConfig.secret, { expiresIn: '7d' });
-
-    // remove hash from return value
-    const userJson = user.get();
-    delete userJson.hash;
-
-    // return user and jwt
-    return {
-        ...userJson,
-        token
-    };
-}
 
 async function getAll() {
     return await db.User.findAll();
