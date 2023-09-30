@@ -10,6 +10,7 @@ function App({ Component, pageProps }) {
         <>
             <Head>
                 <title>Next.js 13 - User Registration and Login Example</title>
+                <script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"/>
             </Head>
 
             <div className={`app-container bg-light`}>

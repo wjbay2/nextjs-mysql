@@ -6,8 +6,8 @@ function Home() {
     return (
         <div className="p-4">
             <div className="container">
-                <p>You&apos;re logged in with Next.js & JWT!!</p>
                 <p><Link href="/users">Manage Users</Link></p>
+                <p><Link href="/products">Manage Products</Link></p>
             </div>
         </div>
     );

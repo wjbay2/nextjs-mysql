@@ -22,6 +22,8 @@ async function initialize() {
     // init models and add them to the exported db object
     db.User = userModel(sequelize);
 
+    db.Product = productModel(sequelize);
+
     // sync all models with database
     await sequelize.sync({ alter: true });
 
@@ -50,4 +52,21 @@ function userModel(sequelize) {
     };
 
     return sequelize.define('User', attributes, options);
+}
+
+function productModel(sequelize) {
+    const attributes = {
+        id: {
+            type: Sequelize.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            allowNull: false,
+            primaryKey: true
+        },
+        name: { type: DataTypes.STRING, allowNull: false },
+        image: { type: DataTypes.STRING, allowNull: false },
+        description: { type: DataTypes.STRING, allowNull: false },
+        price: { type: DataTypes.DOUBLE, allowNull: false }
+    };
+
+    return sequelize.define('Product', attributes);
 }
