@@ -20,7 +20,7 @@ export default function Edit() {
 
     return (
         <Layout>
-            <h1>Edit Product</h1>
+            <h2 className='mb-4'>Edit Product</h2>
             {product ? <AddEditForm product={product} /> : <Spinner />}
         </Layout>
     );

@@ -23,9 +23,9 @@ export default function Index() {
 
     return (
         <Layout>
-            <h1>Products</h1>
-            <Link href="/products/add" className="btn btn-sm btn-success mb-2">Add Product</Link>
-            <table className="table table-striped">
+            <h2 className='mb-4'>Products</h2>
+            <Link href="/products/add" className="btn btn-success mb-2">Add Product</Link>
+            <table className="table table-hover">
                 <thead>
                     <tr>
                         <th style={{ width: '20%' }}>Name</th>
@@ -38,18 +38,26 @@ export default function Index() {
                 <tbody>
                     {products && products.map(product => <tr key={product.id}>
                         <td>{product.name}</td>
-                        <td>{product.image &&
-                            <Image src={product.image} alt="image" width={40} height={40}
-                                style={{ objectFit: 'contain' }} />
-                        }</td>
+                        <td>
+                            {product.image &&
+                                <a href={product.image} target='_blank'>
+                                    <Image src={product.image} alt="image" width={40} height={40}
+                                        style={{ objectFit: 'contain' }} />
+                                </a>
+                            }
+                        </td>
                         <td>{product.description}</td>
                         <td>{product.price}</td>
                         <td style={{ whiteSpace: 'nowrap' }}>
-                            <Link href={`/products/edit/${product.id}`} className="btn btn-sm btn-primary me-1">Edit</Link>
-                            <button onClick={() => deleteProduct(product.id)} className="btn btn-sm btn-danger btn-delete-product" style={{ width: '60px' }} disabled={product.isDeleting}>
+                            <Link href={`/products/edit/${product.id}`} className="btn btn-sm btn-primary me-3">Edit</Link>
+                            <button onClick={() => { 
+                                if (confirm(`Confirm to delete ${product.name} ?`)) { deleteProduct(product.id) } 
+                                }} className="btn btn-sm btn-danger btn-delete-product" 
+                                style={{ width: '60px' }} disabled={product.isDeleting}>
                                 {product.isDeleting
                                     ? <span className="spinner-border spinner-border-sm"></span>
-                                    : <span>Delete</span>}
+                                    : <span>Delete</span>
+                                }
                             </button>
                         </td>
                     </tr>
@@ -63,7 +71,7 @@ export default function Index() {
                     {products && !products.length &&
                         <tr>
                             <td colSpan="4" className="text-center">
-                                <div className="p-2">No Products To Display</div>
+                                <div className="p-2">No Products found!</div>
                             </td>
                         </tr>}
                 </tbody>
