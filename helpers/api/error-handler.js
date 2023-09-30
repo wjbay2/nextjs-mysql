@@ -1,5 +1,3 @@
-export { errorHandler };
-
 function errorHandler(err, res) {
     if (typeof (err) === 'string') {
         // custom application error
@@ -7,8 +5,10 @@ function errorHandler(err, res) {
         const statusCode = is404 ? 404 : 400;
         return res.status(statusCode).json({ message: err });
     }
-
+    
     // default to 500 server error
     console.error(err);
     return res.status(500).json({ message: err.message });
 }
+
+export { errorHandler };

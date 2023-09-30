@@ -1,5 +1,3 @@
-export { Layout };
-
 function Layout({ children }) {
     return (
         <div className="p-4">
@@ -9,3 +7,5 @@ function Layout({ children }) {
         </div>
     );
 }
+
+export { Layout };

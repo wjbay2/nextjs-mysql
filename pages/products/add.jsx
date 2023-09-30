@@ -1,12 +1,10 @@
-import { Layout, AddEdit } from 'components/products';
+import { Layout, AddEditForm } from 'components/products';
 
-export default Add;
-
-function Add() {
+export default function Add() {
     return (
         <Layout>
             <h1>Add Product</h1>
-            <AddEdit />
+            <AddEditForm />
         </Layout>
     );
 }

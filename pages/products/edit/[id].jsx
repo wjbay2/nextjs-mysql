@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Layout, AddEdit } from 'components/products';
+import { Layout, AddEditForm } from 'components/products';
 import { Spinner } from 'components';
 import { productService, alertService } from 'services';
 
-export default Edit;
-
-function Edit() {
+export default function Edit() {
     const router = useRouter();
     const [product, setProduct] = useState(null);
 
@@ -23,7 +21,7 @@ function Edit() {
     return (
         <Layout>
             <h1>Edit Product</h1>
-            {product ? <AddEdit product={product} /> : <Spinner />}
+            {product ? <AddEditForm product={product} /> : <Spinner />}
         </Layout>
     );
 }

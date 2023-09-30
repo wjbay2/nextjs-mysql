@@ -1,7 +1,5 @@
 import { db, errorHandler } from 'helpers/api';
 
-export { apiHandler };
-
 function apiHandler(handler) {
     return async (req, res) => {
         const method = req.method.toLowerCase();
@@ -11,15 +9,14 @@ function apiHandler(handler) {
             return res.status(405).end(`Method ${req.method} Not Allowed`);
 
         try {
-            // init db if required
             if (!db.initialized)
                 await db.initialize();
 
-            // route handler
             await handler[method](req, res);
         } catch (err) {
-            // global error handler
             errorHandler(err, res);
         }
     }
 }
+
+export { apiHandler };

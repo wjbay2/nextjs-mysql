@@ -6,12 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { client } from 'filestack-react';
 import Image from 'next/image';
+import { productService, alertService } from 'services'
 
-import { productService, alertService } from 'services';
-
-export { AddEdit };
-
-function AddEdit(props) {
+function AddEditForm(props) {
     const product = props?.product;
     const router = useRouter();
 
@@ -121,3 +118,5 @@ function AddEdit(props) {
         </form>
     );
 }
+
+export { AddEditForm };

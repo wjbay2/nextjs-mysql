@@ -24,7 +24,6 @@ async function create(params) {
 
     const product = new db.Product(params);
     
-    // save product
     await product.save();
 }
 

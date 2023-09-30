@@ -5,9 +5,7 @@ import { Layout } from 'components/products';
 import { productService } from 'services';
 import Image from 'next/image';
 
-export default Index;
-
-function Index() {
+export default function Index() {
     const [products, setProducts] = useState(null);
     useEffect(() => {
         productService.getAll().then(x => setProducts(x));
@@ -22,7 +20,7 @@ function Index() {
             setProducts(products => products.filter(x => x.id !== id));
         });
     }
-    console.log('products', products);
+
     return (
         <Layout>
             <h1>Products</h1>

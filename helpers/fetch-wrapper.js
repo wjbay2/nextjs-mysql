@@ -1,5 +1,3 @@
-import getConfig from 'next/config';
-
 export const fetchWrapper = {
     get: request('GET'),
     post: request('POST'),
@@ -25,10 +23,7 @@ async function handleResponse(response) {
     const isJson = response.headers?.get('content-type')?.includes('application/json');
     const data = isJson ? await response.json() : null;
 
-    // check for error response
     if (!response.ok) {
-
-        // get error message from body or default to response status
         const error = (data && data.message) || response.statusText;
         return Promise.reject(error);
     }
