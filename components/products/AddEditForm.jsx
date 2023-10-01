@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,21 +9,24 @@ import { productService, alertService } from 'services';
 
 function AddEditForm(props) {
     const product = props?.product;
-    const router = useRouter();
+    const {router, asPath} = useRouter();
+    const [file, setFile] = useState('');
 
     // validation rules
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .required('Name is required'),
-        image: Yup.string()
-            .required('Image is required'),
+        image: file ? Yup.string() : Yup.string().required('Image is required'),
+        // image: Yup.string().required('Image is required'),
         description: Yup.string()
             .required('Description is required'),
         price: Yup.number()
             .typeError('Price must be a number')
             .required('Price is required'),
     });
-    const formOptions = { resolver: yupResolver(validationSchema) };
+    const formOptions = {
+        resolver: yupResolver(validationSchema), 
+    };
 
     if (product) {
         formOptions.defaultValues = props.product;
@@ -35,6 +37,7 @@ function AddEditForm(props) {
 
     async function onSubmit(data) {
         alertService.clear();
+        data.image = file;
         try {
             let message;
             if (product) {
@@ -45,7 +48,6 @@ function AddEditForm(props) {
                 message = 'Product added';
             }
 
-            // router.push('/products');
             router.back();
             alertService.success(message, true);
         } catch (error) {
@@ -55,7 +57,6 @@ function AddEditForm(props) {
     }
 
     // handle file upload using FileStack
-    const [file, setFile] = useState('');
     const filePickerOptions = {
         accept: 'image/*',
         maxSize: 1024 * 1024,
@@ -79,7 +80,7 @@ function AddEditForm(props) {
             </div>
             <div className="mb-4 col d-flex flex-column align-items-start">
                 <label className="form-label fw-bold text-decoration-underline">Image</label>
-                <input name="image" type="text" {...register('image')} className={`visually-hidden  form-control ${errors.image ? 'is-invalid' : ''}`} value={displayImage} />
+                <input name="image" type="text" {...register('image')} className={`visually-hidden  form-control ${!displayImage ? 'is-invalid' : ''}`} value={displayImage} />
                 {displayImage &&
                     <div className='border mb-2'>
                         <a href={displayImage} target='_blank'>
@@ -116,7 +117,7 @@ function AddEditForm(props) {
                     className="btn btn-danger me-3">
                     Reset Form
                 </button>
-                <button onClick={()=>router.back()} type="button" className="btn btn-link">Cancel</button>
+                <button onClick={() => router.push(asPath)} type="button" className="btn btn-link">Cancel</button>
             </div>
         </form>
     );

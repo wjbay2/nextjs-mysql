@@ -11,23 +11,21 @@ const ITEMS_PER_PAGE = 1;
 
 export default function Index() {
     const router = useRouter();
+
     const [products, setProducts] = useState(null);
     const [page, setPage] = useState(null);
-    // const page = router.query.page || 1;
+
     const [totalProducts, setTotalProducts] = useState(0);
-    // useEffect(() => {
-    //     productService.getAll().then(x => setProducts(x));
-    // }, []);
     const offset = ITEMS_PER_PAGE * (page - 1);
+
     useEffect(() => {
-        productService.findAndCountAll(ITEMS_PER_PAGE, offset < 0 ? 0 : offset).then(x => { console.log('x', x); setProducts(x.rows); setTotalProducts(x.count) });
+        productService.findAndCountAll(ITEMS_PER_PAGE, offset < 0 ? 0 : offset).then(x => { setProducts(x.rows); setTotalProducts(x.count) });
     }, [page]);
 
     useEffect(() => {
         if (!router.isReady) return;
-        console.log('router.query.page', router.query.page);
+
         if (!router.query.page) {
-            console.log('########PUSH');
             router.push('?page=1');
         }
         setPage(router.query.page);
@@ -35,7 +33,6 @@ export default function Index() {
 
     useEffect(() => {
         if (!products) return;
-        console.log('HERE', products.length);
         setTotalProducts(products.length);
     }, [page])
 
@@ -48,9 +45,7 @@ export default function Index() {
             setProducts(products => products.filter(x => x.id !== id));
         });
     }
-    console.log('page', page);
-    console.log('products', products);
-    console.log('totalProducts', totalProducts);
+
     return (
         <Layout>
             <h2 className='mb-4'>Products</h2>
@@ -80,12 +75,8 @@ export default function Index() {
                         <td>{product.price}</td>
                         <td style={{ whiteSpace: 'nowrap' }}>
                             <Link
-                                href={`/products/edit/${product.id}`} 
-                                // to={{
-                                //     pathname: `/products/edit/${product.id}`,
-                                //     pageNumber: page
-                                // }}
-                            className="btn btn-sm btn-primary me-3">Edit</Link>
+                                href={`/products/edit/${product.id}`}
+                                className="btn btn-sm btn-primary me-3">Edit</Link>
                             <button onClick={() => {
                                 if (confirm(`Confirm to delete ${product.name} ?`)) { deleteProduct(product.id) }
                             }} className="btn btn-sm btn-danger btn-delete-product"
@@ -112,15 +103,18 @@ export default function Index() {
                         </tr>}
                 </tbody>
             </table>
-            {totalProducts > 0 && <PaginationControl
-                page={page}
-                total={totalProducts || 0}
-                limit={ITEMS_PER_PAGE}
-                changePage={(page) => {
-                    router.push('?page=' + page);
-                    setPage(page);
-                }}
-            />}
+            {totalProducts > 0 &&
+                <div className='mt-5 d-flex justify-content-end'>
+                    <PaginationControl
+                        page={page}
+                        total={totalProducts || 0}
+                        limit={ITEMS_PER_PAGE}
+                        changePage={(page) => {
+                            router.push('?page=' + page);
+                            setPage(page);
+                        }} />
+                </div>
+            }
         </Layout>
     );
 }

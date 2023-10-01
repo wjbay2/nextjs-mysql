@@ -38,7 +38,7 @@ async function create(params) {
 
 async function update(id, params) {
     const product = await db.Product.findByPk(id);
-
+    console.log('params',params);
     // validate
     if (!product) throw 'Product not found';
     if (product.name !== params.name && await db.Product.findOne({ where: { name: params.name } })) {
