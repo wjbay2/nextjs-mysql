@@ -16,6 +16,9 @@ async function getAll() {
 async function findAndCountAll(limit, offset) {
     return await db.Product.findAndCountAll({
         where: {},
+        order: [
+            ['updatedAt', 'ASC']
+        ],
         limit: Number(limit),
         offset: Number(offset),
     });
@@ -32,13 +35,13 @@ async function create(params) {
     }
 
     const product = new db.Product(params);
-    
+
     await product.save();
 }
 
 async function update(id, params) {
     const product = await db.Product.findByPk(id);
-    console.log('params',params);
+
     // validate
     if (!product) throw 'Product not found';
     if (product.name !== params.name && await db.Product.findOne({ where: { name: params.name } })) {

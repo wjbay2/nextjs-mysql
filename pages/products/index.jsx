@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import { useRouter } from 'next/router';
 
-const ITEMS_PER_PAGE = 1;
+const ITEMS_PER_PAGE = 10;
 
 export default function Index() {
     const router = useRouter();
@@ -72,7 +72,7 @@ export default function Index() {
                             }
                         </td>
                         <td>{product.description}</td>
-                        <td>{product.price}</td>
+                        <td>{product.price.toFixed(2)}</td>
                         <td style={{ whiteSpace: 'nowrap' }}>
                             <Link
                                 href={`/products/edit/${product.id}`}

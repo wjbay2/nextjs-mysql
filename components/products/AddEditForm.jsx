@@ -9,8 +9,8 @@ import { productService, alertService } from 'services';
 
 function AddEditForm(props) {
     const product = props?.product;
-    const {router, asPath} = useRouter();
-    const [file, setFile] = useState('');
+    const router = useRouter();
+    const [file, setFile] = useState(product?.image);
 
     // validation rules
     const validationSchema = Yup.object().shape({
@@ -29,7 +29,8 @@ function AddEditForm(props) {
     };
 
     if (product) {
-        formOptions.defaultValues = props.product;
+        product.price = (Math.round(product.price * 100) / 100).toFixed(2);
+        formOptions.defaultValues = product;
     }
 
     const { register, handleSubmit, reset, formState } = useForm(formOptions);
@@ -117,7 +118,7 @@ function AddEditForm(props) {
                     className="btn btn-danger me-3">
                     Reset Form
                 </button>
-                <button onClick={() => router.push(asPath)} type="button" className="btn btn-link">Cancel</button>
+                <a onClick={() => router.back()} className="btn btn-link">Cancel</a>
             </div>
         </form>
     );
