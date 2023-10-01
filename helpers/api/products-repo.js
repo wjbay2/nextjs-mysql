@@ -2,6 +2,7 @@ import { db } from 'helpers/api';
 
 export const productsRepo = {
     getAll,
+    findAndCountAll,
     getById,
     create,
     update,
@@ -10,6 +11,14 @@ export const productsRepo = {
 
 async function getAll() {
     return await db.Product.findAll();
+}
+
+async function findAndCountAll(limit, offset) {
+    return await db.Product.findAndCountAll({
+        where: {},
+        limit: Number(limit),
+        offset: Number(offset),
+    });
 }
 
 async function getById(id) {

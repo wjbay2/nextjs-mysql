@@ -4,12 +4,40 @@ import { Spinner } from 'components';
 import { Layout } from 'components/products';
 import { productService } from 'services';
 import Image from 'next/image';
+import { PaginationControl } from 'react-bootstrap-pagination-control';
+import { useRouter } from 'next/router';
+
+const ITEMS_PER_PAGE = 1;
 
 export default function Index() {
+    const router = useRouter();
     const [products, setProducts] = useState(null);
+    const [page, setPage] = useState(null);
+    // const page = router.query.page || 1;
+    const [totalProducts, setTotalProducts] = useState(0);
+    // useEffect(() => {
+    //     productService.getAll().then(x => setProducts(x));
+    // }, []);
+    const offset = ITEMS_PER_PAGE * (page - 1);
     useEffect(() => {
-        productService.getAll().then(x => setProducts(x));
-    }, []);
+        productService.findAndCountAll(ITEMS_PER_PAGE, offset < 0 ? 0 : offset).then(x => { console.log('x', x); setProducts(x.rows); setTotalProducts(x.count) });
+    }, [page]);
+
+    useEffect(() => {
+        if (!router.isReady) return;
+        console.log('router.query.page', router.query.page);
+        if (!router.query.page) {
+            console.log('########PUSH');
+            router.push('?page=1');
+        }
+        setPage(router.query.page);
+    }, [router.isReady]);
+
+    useEffect(() => {
+        if (!products) return;
+        console.log('HERE', products.length);
+        setTotalProducts(products.length);
+    }, [page])
 
     function deleteProduct(id) {
         setProducts(products.map(x => {
@@ -20,7 +48,9 @@ export default function Index() {
             setProducts(products => products.filter(x => x.id !== id));
         });
     }
-
+    console.log('page', page);
+    console.log('products', products);
+    console.log('totalProducts', totalProducts);
     return (
         <Layout>
             <h2 className='mb-4'>Products</h2>
@@ -49,10 +79,16 @@ export default function Index() {
                         <td>{product.description}</td>
                         <td>{product.price}</td>
                         <td style={{ whiteSpace: 'nowrap' }}>
-                            <Link href={`/products/edit/${product.id}`} className="btn btn-sm btn-primary me-3">Edit</Link>
-                            <button onClick={() => { 
-                                if (confirm(`Confirm to delete ${product.name} ?`)) { deleteProduct(product.id) } 
-                                }} className="btn btn-sm btn-danger btn-delete-product" 
+                            <Link
+                                href={`/products/edit/${product.id}`} 
+                                // to={{
+                                //     pathname: `/products/edit/${product.id}`,
+                                //     pageNumber: page
+                                // }}
+                            className="btn btn-sm btn-primary me-3">Edit</Link>
+                            <button onClick={() => {
+                                if (confirm(`Confirm to delete ${product.name} ?`)) { deleteProduct(product.id) }
+                            }} className="btn btn-sm btn-danger btn-delete-product"
                                 style={{ width: '60px' }} disabled={product.isDeleting}>
                                 {product.isDeleting
                                     ? <span className="spinner-border spinner-border-sm"></span>
@@ -64,18 +100,27 @@ export default function Index() {
                     )}
                     {!products &&
                         <tr>
-                            <td colSpan="4">
+                            <td colSpan="5">
                                 <Spinner />
                             </td>
                         </tr>}
                     {products && !products.length &&
                         <tr>
-                            <td colSpan="4" className="text-center">
+                            <td colSpan="5" className="text-center">
                                 <div className="p-2">No Products found!</div>
                             </td>
                         </tr>}
                 </tbody>
             </table>
+            {totalProducts > 0 && <PaginationControl
+                page={page}
+                total={totalProducts || 0}
+                limit={ITEMS_PER_PAGE}
+                changePage={(page) => {
+                    router.push('?page=' + page);
+                    setPage(page);
+                }}
+            />}
         </Layout>
     );
 }

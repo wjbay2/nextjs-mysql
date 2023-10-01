@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { client } from 'filestack-react';
 import Image from 'next/image';
-import { productService, alertService } from 'services'
+import { productService, alertService } from 'services';
 
 function AddEditForm(props) {
     const product = props?.product;
@@ -45,7 +45,8 @@ function AddEditForm(props) {
                 message = 'Product added';
             }
 
-            router.push('/products');
+            // router.push('/products');
+            router.back();
             alertService.success(message, true);
         } catch (error) {
             alertService.error(error);
@@ -92,7 +93,7 @@ function AddEditForm(props) {
             </div>
             <div className="mb-4 col">
                 <label className="form-label fw-bold text-decoration-underline">Description</label>
-                <textarea name="description" {...register('description')} className={`form-control ${errors.description ? 'is-invalid' : ''}`} rows={5}/>
+                <textarea name="description" {...register('description')} className={`form-control ${errors.description ? 'is-invalid' : ''}`} rows={5} />
                 <div className="invalid-feedback">{errors.description?.message}</div>
             </div>
             <div className="mb-4 col">
@@ -105,16 +106,17 @@ function AddEditForm(props) {
                     {formState.isSubmitting && <span className="spinner-border spinner-border-sm me-1"></span>}
                     Save
                 </button>
-                <button onClick={() => { 
-                    if( confirm('Proceed reset form back to original value ?') ){
+                <button onClick={() => {
+                    if (confirm('Proceed reset form back to original value ?')) {
                         reset(formOptions.defaultValues); setFile(product?.image || "");
-                    } }} 
-                    type="button" 
-                    disabled={formState.isSubmitting} 
+                    }
+                }}
+                    type="button"
+                    disabled={formState.isSubmitting}
                     className="btn btn-danger me-3">
-                        Reset Form
-                    </button>
-                <Link href="/products" className="btn btn-link">Cancel</Link>
+                    Reset Form
+                </button>
+                <button onClick={()=>router.back()} type="button" className="btn btn-link">Cancel</button>
             </div>
         </form>
     );
