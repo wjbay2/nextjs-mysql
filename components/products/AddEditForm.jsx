@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { client } from 'filestack-react';
+import { client } from 'filestack-react-18';
 import Image from 'next/image';
 import { productService, alertService } from 'services';
 

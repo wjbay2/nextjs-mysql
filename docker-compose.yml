@@ -27,26 +27,26 @@ services:
       - '3306'
     volumes:
       - my-db:/var/lib/mysql
-  app:
-    image: nextjs-demo-docker
-    depends_on:
-      - mysql
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    volumes:
-        - .:/app
-        - /app/node_modules
-        - /app/.next
-    # extra_hosts:
-    #   - "host.docker.internal:172.20.0.2"
-    #   - "host.docker.internal:host-gateway"
-    ports:
-      - "3000:3000"
-    links:
-      - mysql:mysql
-    networks:
-      - app-tier
+  # app:
+  #   image: nextjs-demo-docker
+  #   depends_on:
+  #     - mysql
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #       - .:/app
+  #       - /app/node_modules
+  #       - /app/.next
+  #   # extra_hosts:
+  #   #   - "host.docker.internal:172.20.0.2"
+  #   #   - "host.docker.internal:host-gateway"
+  #   ports:
+  #     - "3000:3000"
+  #   links:
+  #     - mysql:mysql
+  #   networks:
+  #     - app-tier
 
 volumes:
   my-db:     
