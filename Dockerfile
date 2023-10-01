@@ -1,9 +1,9 @@
-FROM node:18-alpine
-RUN apk add --no-cache g++ make py3-pip libc6-compat
+FROM node:18-slim
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install -g pnpm
+RUN pnpm install 
 COPY . .
 EXPOSE 3000
-CMD npm run dev
+CMD pnpm run dev
